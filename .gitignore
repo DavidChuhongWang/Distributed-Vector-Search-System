@@ -1,0 +1,8 @@
+/build/
+/generated/
+*.pb.cc
+*.pb.h
+*.pb.go
+*.pyc
+__pycache__/
+.DS_Store

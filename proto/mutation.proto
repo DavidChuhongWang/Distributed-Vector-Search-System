@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package distributed;
+
+option cc_enable_arenas = true;
+
+message CommandEnvelope {
+  enum Type {
+    UPSERT = 0;
+    DELETE = 1;
+  }
+  Type type = 1;
+  bytes payload = 2;
+}

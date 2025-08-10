@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package distributed;
+
+option cc_enable_arenas = true;
+
+message ShardConfig {
+  string shard_id = 1;
+  uint32 dimension = 2;
+  string index_path = 3;
+}
+
+message PeerConfig {
+  string node_id = 1;
+  string address = 2;
+}
+
+message CacheConfig {
+  uint32 max_entries = 1;
+  uint32 default_ttl_seconds = 2;
+}
+
+message BatchingConfig {
+  uint32 preferred_batch_size = 1;
+  uint32 max_batch_delay_ms = 2;
+}
+
+message NodeConfig {
+  string node_id = 1;
+  string bind_address = 2;
+  repeated PeerConfig peers = 3;
+  repeated ShardConfig shards = 4;
+  CacheConfig cache = 5;
+  BatchingConfig batching = 6;
+}

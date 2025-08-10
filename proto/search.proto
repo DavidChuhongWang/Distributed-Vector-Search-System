@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package distributed;
+
+option cc_enable_arenas = true;
+
+// Consistency levels offered to clients.
+enum ConsistencyLevel {
+  STRONG = 0;
+  BOUNDED_STALENESS = 1;
+  EVENTUAL = 2;
+}
+
+message QueryVector {
+  repeated float values = 1;
+}
+
+message SearchRequest {
+  QueryVector query = 1;
+  uint32 top_k = 2;
+  ConsistencyLevel consistency = 3;
+  string client_id = 4;
+  uint64 trace_id = 5;
+}
+
+message SearchResponse {
+  message ScoredPoint {
+    uint64 id = 1;
+    float distance = 2;
+    string shard_id = 3;
+  }
+  repeated ScoredPoint hits = 1;
+  bool served_from_cache = 2;
+  string leader_hint = 3;
+}
+
+message BatchSearchRequest {
+  repeated SearchRequest requests = 1;
+}
+
+message BatchSearchResponse {
+  repeated SearchResponse responses = 1;
+}
+
+message UpsertRequest {
+  uint64 id = 1;
+  QueryVector vector = 2;
+  string shard_id = 3;
+}
+
+message UpsertResponse {
+  bool success = 1;
+  string leader_hint = 2;
+}
+
+message DeleteRequest {
+  uint64 id = 1;
+  string shard_id = 2;
+}
+
+message DeleteResponse {
+  bool success = 1;
+  string leader_hint = 2;
+}
+
+message WarmRequest {
+  repeated uint64 ids = 1;
+}
+
+message WarmResponse {
+  bool success = 1;
+}
+
+service VectorSearch {
+  rpc Search(SearchRequest) returns (SearchResponse);
+  rpc BatchSearch(BatchSearchRequest) returns (BatchSearchResponse);
+  rpc Upsert(UpsertRequest) returns (UpsertResponse);
+  rpc Delete(DeleteRequest) returns (DeleteResponse);
+  rpc WarmCache(WarmRequest) returns (WarmResponse);
+}
