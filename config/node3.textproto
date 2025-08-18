@@ -1,0 +1,28 @@
+node_id: "node3"
+bind_address: "0.0.0.0:50053"
+peers {
+  node_id: "node1"
+  address: "127.0.0.1:50051"
+}
+peers {
+  node_id: "node2"
+  address: "127.0.0.1:50052"
+}
+shards {
+  shard_id: "users-part-4"
+  dimension: 768
+  index_path: "./indices/users-part-4.faiss"
+}
+shards {
+  shard_id: "users-part-5"
+  dimension: 768
+  index_path: "./indices/users-part-5.faiss"
+}
+cache {
+  max_entries: 2048
+  default_ttl_seconds: 30
+}
+batching {
+  preferred_batch_size: 16
+  max_batch_delay_ms: 5
+}
